@@ -7,9 +7,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
 import subway.support.AcceptanceTest;
 
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
 import static subway.StationAcceptanceSteps.*;
 
 @DisplayName("지하철역 관련 기능")
@@ -63,8 +60,6 @@ class StationAcceptanceTest extends AcceptanceTest {
     ExtractableResponse<Response> response = 지하철역_삭제_요청(uri);
 
     지하철역_삭제됨(response);
-    ExtractableResponse<Response> stationsResponse = 지하철역_목록_조회_요청();
-    List<String> stationNames = stationsResponse.jsonPath().getList("name", String.class);
-    assertThat(stationNames).doesNotContain("강남역").isEmpty();
+    지하철역_목록에_포함되지_않음(지하철역_목록_조회_요청(), "강남역");
   }
 }

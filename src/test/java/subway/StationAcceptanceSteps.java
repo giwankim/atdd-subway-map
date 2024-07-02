@@ -48,6 +48,11 @@ public class StationAcceptanceSteps {
     assertThat(stationNames).containsExactlyInAnyOrder(names);
   }
 
+  public static void 지하철역_목록에_포함되지_않음(ExtractableResponse<Response> response, String... names) {
+    List<String> stationNames = response.jsonPath().getList("name", String.class);
+    assertThat(stationNames).doesNotContain(names).isEmpty();
+  }
+
   public static ExtractableResponse<Response> 지하철역_삭제_요청(String uri) {
     return RestAssured.given().log().all()
         .when().delete(uri)
