@@ -1,6 +1,5 @@
 package subway;
 
-import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.DisplayName;
@@ -30,12 +29,7 @@ class StationAcceptanceTest extends AcceptanceTest {
     지하철역_생성됨(response);
 
     // then
-    List<String> stationNames =
-        RestAssured.given().log().all()
-            .when().get("/stations")
-            .then().log().all()
-            .extract().jsonPath().getList("name", String.class);
-    assertThat(stationNames).containsAnyOf("강남역");
+    지하철역_목록에_포함됨(지하철역_목록_조회_요청(), "강남역");
   }
 
   /**
@@ -52,12 +46,8 @@ class StationAcceptanceTest extends AcceptanceTest {
     ExtractableResponse<Response> response = 지하철역_목록_조회_요청();
 
     지하철역_목록_조회됨(response);
-
-    List<String> stationNames = response.jsonPath().getList("name", String.class);
-    assertThat(stationNames).containsExactlyInAnyOrder("강남역", "역삼역");
+    지하철역_목록에_포함됨(response, "강남역", "역삼역");
   }
-
-
 
   /**
    * Given 지하철역을 생성하고
@@ -73,7 +63,6 @@ class StationAcceptanceTest extends AcceptanceTest {
     ExtractableResponse<Response> response = 지하철역_삭제_요청(uri);
 
     지하철역_삭제됨(response);
-
     ExtractableResponse<Response> stationsResponse = 지하철역_목록_조회_요청();
     List<String> stationNames = stationsResponse.jsonPath().getList("name", String.class);
     assertThat(stationNames).doesNotContain("강남역").isEmpty();

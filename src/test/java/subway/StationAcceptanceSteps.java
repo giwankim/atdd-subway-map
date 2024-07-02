@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -40,6 +41,11 @@ public class StationAcceptanceSteps {
 
   public static void 지하철역_목록_조회됨(ExtractableResponse<Response> response) {
     assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+  }
+
+  public static void 지하철역_목록에_포함됨(ExtractableResponse<Response> response, String... names) {
+    List<String> stationNames = response.jsonPath().getList("name", String.class);
+    assertThat(stationNames).containsExactlyInAnyOrder(names);
   }
 
   public static ExtractableResponse<Response> 지하철역_삭제_요청(String uri) {
