@@ -5,15 +5,13 @@ import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
+import org.springframework.http.HttpHeaders;
 import subway.support.AcceptanceTest;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static subway.StationAcceptanceSteps.*;
 
 @DisplayName("지하철역 관련 기능")
 class StationAcceptanceTest extends AcceptanceTest {
@@ -26,10 +24,10 @@ class StationAcceptanceTest extends AcceptanceTest {
   @Test
   void createStation() {
     // when
-    ExtractableResponse<Response> response = givenStationCreated("강남역");
+    ExtractableResponse<Response> response = 지하철역_생성_요청("강남역");
 
     // then
-    assertThat(response.statusCode()).isEqualTo(HttpStatus.CREATED.value());
+    지하철역_생성됨(response);
 
     // then
     List<String> stationNames =
@@ -48,36 +46,36 @@ class StationAcceptanceTest extends AcceptanceTest {
   @DisplayName("지하철역 목록을 조회한다.")
   @Test
   void showStations() {
-    givenStationCreated("강남역");
-    givenStationCreated("역삼역");
+    지하철역_생성_요청("강남역");
+    지하철역_생성_요청("역삼역");
 
-    ExtractableResponse<Response> response = RestAssured.given().log().all()
-        .when().get("/stations")
-        .then().log().all()
-        .extract();
+    ExtractableResponse<Response> response = 지하철역_목록_조회_요청();
 
-    assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+    지하철역_목록_조회됨(response);
 
     List<String> stationNames = response.jsonPath().getList("name", String.class);
     assertThat(stationNames).containsExactlyInAnyOrder("강남역", "역삼역");
   }
+
+
 
   /**
    * Given 지하철역을 생성하고
    * When 그 지하철역을 삭제하면
    * Then 그 지하철역 목록 조회 시 생성한 역을 찾을 수 없다
    */
-  // TODO: 지하철역 제거 인수 테스트 메서드 생성
+  @DisplayName("지하철역을 삭제한다.")
+  @Test
+  void deleteStation() {
+    ExtractableResponse<Response> createResponse = 지하철역_생성_요청("강남역");
+    String uri = createResponse.header(HttpHeaders.LOCATION);
 
-  private static ExtractableResponse<Response> givenStationCreated(String name) {
-    Map<String, String> params = new HashMap<>();
-    params.put("name", name);
+    ExtractableResponse<Response> response = 지하철역_삭제_요청(uri);
 
-    return RestAssured.given().log().all()
-        .body(params)
-        .contentType(MediaType.APPLICATION_JSON_VALUE)
-        .when().post("/stations")
-        .then().log().all()
-        .extract();
+    지하철역_삭제됨(response);
+
+    ExtractableResponse<Response> stationsResponse = 지하철역_목록_조회_요청();
+    List<String> stationNames = stationsResponse.jsonPath().getList("name", String.class);
+    assertThat(stationNames).doesNotContain("강남역").isEmpty();
   }
 }
