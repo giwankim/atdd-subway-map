@@ -1,21 +1,17 @@
 package subway.line;
 
+import static subway.line.LineAcceptanceSteps.*;
+import static subway.support.Fixtures.aCreateLineRequest;
+
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import subway.support.AcceptanceTest;
 
-import static subway.line.LineAcceptanceSteps.*;
-import static subway.support.Fixtures.aCreateLineRequest;
-
 @DisplayName("지하철 노선 관리 기능")
 class LineAcceptanceTest extends AcceptanceTest {
-  /**
-   * Given 새로운 지하철 노선 정보를 입력하고,
-   * When 관리자가 노선을 생성하면,
-   * Then 해당 노선이 생성되고 노선 목록에 포함된다.
-   */
+  /** Given 새로운 지하철 노선 정보를 입력하고, When 관리자가 노선을 생성하면, Then 해당 노선이 생성되고 노선 목록에 포함된다. */
   @DisplayName("지하철 노선을 생성한다.")
   @Test
   void createLine() {

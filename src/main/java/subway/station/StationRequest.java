@@ -1,9 +1,9 @@
 package subway.station;
 
 public class StationRequest {
-    private String name;
+  private String name;
 
-    public String getName() {
-        return name;
-    }
+  public String getName() {
+    return name;
+  }
 }

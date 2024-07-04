@@ -1,5 +1,7 @@
 package subway.line;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
@@ -7,19 +9,20 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 public class LineAcceptanceSteps {
-  private LineAcceptanceSteps() {
-  }
+  private LineAcceptanceSteps() {}
 
   public static ExtractableResponse<Response> 지하철_노선_생성_요청(CreateLineRequest request) {
-    return RestAssured.given().log().all()
+    return RestAssured.given()
+        .log()
+        .all()
         .contentType(MediaType.APPLICATION_JSON_VALUE)
         .body(request)
         .when()
         .post("/lines")
-        .then().log().all()
+        .then()
+        .log()
+        .all()
         .extract();
   }
 
@@ -29,10 +32,7 @@ public class LineAcceptanceSteps {
   }
 
   public static ExtractableResponse<Response> 지하철_노선_목록_조회_요청() {
-    return RestAssured.given().log().all()
-        .when().get("/lines")
-        .then().log().all()
-        .extract();
+    return RestAssured.given().log().all().when().get("/lines").then().log().all().extract();
   }
 
   public static void 지하철_노선_목록_조회됨(ExtractableResponse<Response> response) {
