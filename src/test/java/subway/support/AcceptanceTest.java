@@ -12,12 +12,12 @@ import org.springframework.test.context.TestConstructor;
 @TestConstructor(autowireMode = TestConstructor.AutowireMode.ALL)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public abstract class AcceptanceTest {
-  @LocalServerPort int port;
+  @LocalServerPort private int port;
 
   @Autowired private DatabaseCleanup databaseCleanup;
 
   @BeforeEach
-  void setUp() {
+  protected void setUp() {
     if (RestAssured.port == RestAssured.UNDEFINED_PORT) {
       RestAssured.port = port;
       databaseCleanup.afterPropertiesSet();

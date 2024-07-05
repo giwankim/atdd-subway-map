@@ -7,11 +7,11 @@ import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
-@Service
+@Component
 @ActiveProfiles("test")
 public class DatabaseCleanup implements InitializingBean {
   @Autowired private EntityManager entityManager;
