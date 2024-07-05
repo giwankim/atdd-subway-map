@@ -10,6 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.jdbc.core.JdbcTemplate;
 import subway.support.AcceptanceTest;
 
@@ -48,5 +49,18 @@ class LineAcceptanceTest extends AcceptanceTest {
     ExtractableResponse<Response> response = 지하철_노선_목록_조회_요청();
 
     지하철_노선_목록에_포함됨(response, lineTwo, shinBundang);
+  }
+
+  /** Given: 특정 지하철 노선이 등록되어 있고, When: 관리자가 해당 노선을 조회하면, Then: 해당 노선의 정보가 반환된다. */
+  @DisplayName("지하철 노선을 조회한다.")
+  @Test
+  void showStation() {
+    Line line = lineTwo();
+    ExtractableResponse<Response> createResponse = 지하철_노선_생성_요청(line);
+    String uri = createResponse.header(HttpHeaders.LOCATION);
+
+    ExtractableResponse<Response> response = 지하철_노선_조회_요청(uri);
+
+    지하철_노선_조회됨(response, line);
   }
 }

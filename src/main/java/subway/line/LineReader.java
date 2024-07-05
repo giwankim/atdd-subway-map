@@ -12,4 +12,10 @@ public class LineReader {
   public List<Line> read() {
     return lineRepository.findAll();
   }
+
+  public Line readById(Long id) {
+    return lineRepository
+        .findById(id)
+        .orElseThrow((() -> new IllegalArgumentException("Line #" + id + " not found!")));
+  }
 }

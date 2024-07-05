@@ -11,8 +11,6 @@ import java.util.stream.Collectors;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import subway.station.Station;
-import subway.station.StationRequest;
 
 public class LineAcceptanceSteps {
   private LineAcceptanceSteps() {}
@@ -57,17 +55,12 @@ public class LineAcceptanceSteps {
     assertThat(actualLines).containsExactlyInAnyOrderElementsOf(expectedLines);
   }
 
-  public static ExtractableResponse<Response> 지하철역_생성_요청(Station station) {
-    return RestAssured.given()
-        .log()
-        .all()
-        .body(new StationRequest(station.getName()))
-        .contentType(MediaType.APPLICATION_JSON_VALUE)
-        .when()
-        .post("/stations")
-        .then()
-        .log()
-        .all()
-        .extract();
+  public static ExtractableResponse<Response> 지하철_노선_조회_요청(String uri) {
+    return RestAssured.given().log().all().when().get(uri).then().log().all().extract();
+  }
+
+  public static void 지하철_노선_조회됨(ExtractableResponse<Response> response, Line line) {
+    assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+    assertThat(response.as(LineResponse.class)).isEqualTo(LineResponse.from(line));
   }
 }

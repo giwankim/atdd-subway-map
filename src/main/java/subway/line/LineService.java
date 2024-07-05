@@ -17,4 +17,8 @@ class LineService {
   public List<Line> findAllLines() {
     return lineReader.read();
   }
+
+  public Line findLineById(Long id) {
+    return lineReader.readById(id);
+  }
 }
