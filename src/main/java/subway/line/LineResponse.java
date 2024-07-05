@@ -2,6 +2,7 @@ package subway.line;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
@@ -31,6 +32,10 @@ public class LineResponse {
         Arrays.asList(
             LineStationResponse.from(line.getUpStation()),
             LineStationResponse.from(line.getDownStation())));
+  }
+
+  public static List<LineResponse> listOf(List<Line> lines) {
+    return lines.stream().map(LineResponse::from).collect(Collectors.toList());
   }
 
   @Getter

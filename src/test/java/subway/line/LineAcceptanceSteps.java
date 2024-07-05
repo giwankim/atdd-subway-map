@@ -5,6 +5,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -44,12 +47,14 @@ public class LineAcceptanceSteps {
     return RestAssured.given().log().all().when().get("/lines").then().log().all().extract();
   }
 
-  public static void 지하철_노선_목록_조회됨(ExtractableResponse<Response> response) {
-    assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
-  }
-
-  public static void 지하철_노선_목록에_포함됨(ExtractableResponse<Response> response, String... names) {
-    assertThat(response.jsonPath().getList("name", String.class)).containsExactlyInAnyOrder(names);
+  public static void 지하철_노선_목록에_포함됨(
+      ExtractableResponse<Response> response, ExtractableResponse<Response>... createResponses) {
+    List<LineResponse> actualLines = response.jsonPath().getList(".", LineResponse.class);
+    List<LineResponse> expectedLines =
+        Arrays.stream(createResponses)
+            .map(it -> it.as(LineResponse.class))
+            .collect(Collectors.toList());
+    assertThat(actualLines).containsExactlyInAnyOrderElementsOf(expectedLines);
   }
 
   public static ExtractableResponse<Response> 지하철역_생성_요청(Station station) {

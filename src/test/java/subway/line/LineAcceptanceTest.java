@@ -1,8 +1,8 @@
 package subway.line;
 
-import static subway.line.LineAcceptanceSteps.지하철_노선_생성_요청;
-import static subway.line.LineAcceptanceSteps.지하철_노선_생성됨;
+import static subway.line.LineAcceptanceSteps.*;
 import static subway.support.Fixtures.lineTwo;
+import static subway.support.Fixtures.shinBundangLine;
 
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
@@ -35,6 +35,18 @@ class LineAcceptanceTest extends AcceptanceTest {
     ExtractableResponse<Response> response = 지하철_노선_생성_요청(line);
 
     지하철_노선_생성됨(response);
-    //    지하철_노선_목록에_포함됨(지하철_노선_목록_조회_요청(), "2호선");
+    지하철_노선_목록에_포함됨(지하철_노선_목록_조회_요청(), response);
+  }
+
+  /** Given 여러 개의 지하철 노선이 등록되어 있고, When 관리자가 지하철 노선 목록을 조회하면, Then 모든 지하철 노선 목록이 반환된다. */
+  @DisplayName("지하철 노선 목록을 조회한다.")
+  @Test
+  void showStations() {
+    ExtractableResponse<Response> lineTwo = 지하철_노선_생성_요청(lineTwo());
+    ExtractableResponse<Response> shinBundang = 지하철_노선_생성_요청(shinBundangLine());
+
+    ExtractableResponse<Response> response = 지하철_노선_목록_조회_요청();
+
+    지하철_노선_목록에_포함됨(response, lineTwo, shinBundang);
   }
 }
