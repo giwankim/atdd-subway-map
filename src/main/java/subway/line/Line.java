@@ -18,6 +18,7 @@ public class Line {
   @Column(nullable = false)
   private String name;
 
+  @Column(nullable = false)
   private String color;
 
   @ManyToOne(fetch = FetchType.LAZY)
