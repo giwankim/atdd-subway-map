@@ -42,7 +42,7 @@ class LineAcceptanceTest extends AcceptanceTest {
   /** Given 여러 개의 지하철 노선이 등록되어 있고, When 관리자가 지하철 노선 목록을 조회하면, Then 모든 지하철 노선 목록이 반환된다. */
   @DisplayName("지하철 노선 목록을 조회한다.")
   @Test
-  void showStations() {
+  void showLines() {
     ExtractableResponse<Response> lineTwo = 지하철_노선_생성_요청(lineTwo());
     ExtractableResponse<Response> shinBundang = 지하철_노선_생성_요청(shinBundangLine());
 
@@ -54,7 +54,7 @@ class LineAcceptanceTest extends AcceptanceTest {
   /** Given: 특정 지하철 노선이 등록되어 있고, When: 관리자가 해당 노선을 조회하면, Then: 해당 노선의 정보가 반환된다. */
   @DisplayName("지하철 노선을 조회한다.")
   @Test
-  void showStation() {
+  void showLine() {
     Line line = lineTwo();
     ExtractableResponse<Response> createResponse = 지하철_노선_생성_요청(line);
     String uri = createResponse.header(HttpHeaders.LOCATION);
@@ -63,4 +63,6 @@ class LineAcceptanceTest extends AcceptanceTest {
 
     지하철_노선_조회됨(response, line);
   }
+
+
 }
