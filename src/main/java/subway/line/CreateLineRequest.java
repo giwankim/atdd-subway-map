@@ -1,6 +1,5 @@
 package subway.line;
 
-import lombok.Builder;
 import lombok.Getter;
 
 @Getter
@@ -11,7 +10,6 @@ public class CreateLineRequest {
   private final Long downStationId;
   private final Integer distance;
 
-  @Builder
   public CreateLineRequest(
       String name, String color, Long upStationId, Long downStationId, Integer distance) {
     this.name = name;

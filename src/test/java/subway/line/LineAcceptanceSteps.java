@@ -5,7 +5,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.http.HttpHeaders;
@@ -46,12 +45,10 @@ public class LineAcceptanceSteps {
   }
 
   public static void 지하철_노선_목록에_포함됨(
-      ExtractableResponse<Response> response, ExtractableResponse<Response>... createResponses) {
+      ExtractableResponse<Response> response, List<ExtractableResponse<Response>> createResponses) {
     List<LineResponse> actualLines = response.jsonPath().getList(".", LineResponse.class);
     List<LineResponse> expectedLines =
-        Arrays.stream(createResponses)
-            .map(it -> it.as(LineResponse.class))
-            .collect(Collectors.toList());
+        createResponses.stream().map(it -> it.as(LineResponse.class)).collect(Collectors.toList());
     assertThat(actualLines).containsExactlyInAnyOrderElementsOf(expectedLines);
   }
 
@@ -62,5 +59,25 @@ public class LineAcceptanceSteps {
   public static void 지하철_노선_조회됨(ExtractableResponse<Response> response, Line line) {
     assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
     assertThat(response.as(LineResponse.class)).isEqualTo(LineResponse.from(line));
+  }
+
+  public static ExtractableResponse<Response> 지하철_노선_수정_요청(String uri, String name, String color) {
+    return RestAssured.given()
+        .log()
+        .all()
+        .body(new UpdateLineRequest(name, color))
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
+        .when()
+        .put(uri)
+        .then()
+        .log()
+        .all()
+        .extract();
+  }
+
+  public static void 지하철_노선_수정됨(String uri, String newName, String newColor) {
+    LineResponse updatedLine = 지하철_노선_조회_요청(uri).as(LineResponse.class);
+    assertThat(updatedLine.getName()).isEqualTo(newName);
+    assertThat(updatedLine.getColor()).isEqualTo(newColor);
   }
 }

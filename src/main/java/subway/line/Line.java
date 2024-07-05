@@ -45,4 +45,12 @@ public class Line {
     this.downStation = downStation;
     this.distance = distance;
   }
+
+  public void changeName(String name) {
+    this.name = name;
+  }
+
+  public void changeColor(String color) {
+    this.color = color;
+  }
 }

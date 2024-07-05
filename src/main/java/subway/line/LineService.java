@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 class LineService {
   private final LineAppender lineAppender;
   private final LineReader lineReader;
+  private final LineModifier lineModifier;
 
   public Line saveLine(CreateLineRequest createLineRequest) {
     return lineAppender.append(createLineRequest);
@@ -20,5 +21,9 @@ class LineService {
 
   public Line findLineById(Long id) {
     return lineReader.readById(id);
+  }
+
+  public Line updateById(Long id, UpdateLineRequest request) {
+    return lineModifier.modify(id, request);
   }
 }
