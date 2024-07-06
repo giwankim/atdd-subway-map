@@ -4,6 +4,7 @@ import static subway.line.LineAcceptanceSteps.*;
 import static subway.support.Fixtures.lineTwo;
 import static subway.support.Fixtures.shinBundangLine;
 
+import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import java.util.Arrays;
@@ -78,5 +79,18 @@ class LineAcceptanceTest extends AcceptanceTest {
     지하철_노선_수정_요청(uri, newName, newColor);
 
     지하철_노선_수정됨(uri, newName, newColor);
+  }
+
+  /** Given: 특정 지하철 노선이 등록되어 있고, When: 관리자가 해당 노선을 삭제하면, Then: 해당 노선이 삭제되고 노선 목록에서 제외된다. */
+  @DisplayName("지하철 노선을 삭제한다.")
+  @Test
+  void deleteLine() {
+    ExtractableResponse<Response> createResponse = 지하철_노선_생성_요청(lineTwo());
+    String uri = createResponse.header(HttpHeaders.LOCATION);
+
+    ExtractableResponse<Response> response =
+        RestAssured.given().log().all().when().delete(uri).then().log().all().extract();
+
+    지하철_노선_삭제됨(response, 지하철_노선_목록_조회_요청(), createResponse);
   }
 }

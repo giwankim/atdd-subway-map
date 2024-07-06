@@ -10,6 +10,7 @@ class LineService {
   private final LineAppender lineAppender;
   private final LineReader lineReader;
   private final LineModifier lineModifier;
+  private final LineRemover lineRemover;
 
   public Line saveLine(CreateLineRequest createLineRequest) {
     return lineAppender.append(createLineRequest);
@@ -23,7 +24,11 @@ class LineService {
     return lineReader.readById(id);
   }
 
-  public Line updateById(Long id, UpdateLineRequest request) {
+  public Line updateLineById(Long id, UpdateLineRequest request) {
     return lineModifier.modify(id, request);
+  }
+
+  public void deleteLineById(Long id) {
+    lineRemover.remove(id);
   }
 }
