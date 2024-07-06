@@ -1,4 +1,6 @@
-package subway;
+package subway.station;
+
+import static subway.station.StationAcceptanceSteps.*;
 
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
@@ -7,15 +9,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
 import subway.support.AcceptanceTest;
 
-import static subway.StationAcceptanceSteps.*;
-
 @DisplayName("지하철역 관련 기능")
 class StationAcceptanceTest extends AcceptanceTest {
-  /**
-   * When 지하철역을 생성하면
-   * Then 지하철역이 생성된다
-   * Then 지하철역 목록 조회 시 생성한 역을 찾을 수 있다
-   */
+  /** When 지하철역을 생성하면 Then 지하철역이 생성된다 Then 지하철역 목록 조회 시 생성한 역을 찾을 수 있다 */
   @DisplayName("지하철역을 생성한다.")
   @Test
   void createStation() {
@@ -29,11 +25,7 @@ class StationAcceptanceTest extends AcceptanceTest {
     지하철역_목록에_포함됨(지하철역_목록_조회_요청(), "강남역");
   }
 
-  /**
-   * Given 2개의 지하철역을 생성하고
-   * When 지하철역 목록을 조회하면
-   * Then 2개의 지하철역을 응답 받는다
-   */
+  /** Given 2개의 지하철역을 생성하고 When 지하철역 목록을 조회하면 Then 2개의 지하철역을 응답 받는다 */
   @DisplayName("지하철역 목록을 조회한다.")
   @Test
   void showStations() {
@@ -46,11 +38,7 @@ class StationAcceptanceTest extends AcceptanceTest {
     지하철역_목록에_포함됨(response, "강남역", "역삼역");
   }
 
-  /**
-   * Given 지하철역을 생성하고
-   * When 그 지하철역을 삭제하면
-   * Then 그 지하철역 목록 조회 시 생성한 역을 찾을 수 없다
-   */
+  /** Given 지하철역을 생성하고 When 그 지하철역을 삭제하면 Then 그 지하철역 목록 조회 시 생성한 역을 찾을 수 없다 */
   @DisplayName("지하철역을 삭제한다.")
   @Test
   void deleteStation() {
