@@ -81,6 +81,12 @@ public class LineAcceptanceSteps {
     assertThat(updatedLine.getColor()).isEqualTo(newColor);
   }
 
+  public static ExtractableResponse<Response> 지하철_삭제_요청(String uri) {
+    ExtractableResponse<Response> response =
+        RestAssured.given().log().all().when().delete(uri).then().log().all().extract();
+    return response;
+  }
+
   public static void 지하철_노선_삭제됨(
       ExtractableResponse<Response> response,
       ExtractableResponse<Response> listResponse,

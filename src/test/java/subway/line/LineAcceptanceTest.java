@@ -4,7 +4,6 @@ import static subway.line.LineAcceptanceSteps.*;
 import static subway.support.Fixtures.lineTwo;
 import static subway.support.Fixtures.shinBundangLine;
 
-import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import java.util.Arrays;
@@ -88,8 +87,7 @@ class LineAcceptanceTest extends AcceptanceTest {
     ExtractableResponse<Response> createResponse = 지하철_노선_생성_요청(lineTwo());
     String uri = createResponse.header(HttpHeaders.LOCATION);
 
-    ExtractableResponse<Response> response =
-        RestAssured.given().log().all().when().delete(uri).then().log().all().extract();
+    ExtractableResponse<Response> response = 지하철_삭제_요청(uri);
 
     지하철_노선_삭제됨(response, 지하철_노선_목록_조회_요청(), createResponse);
   }
