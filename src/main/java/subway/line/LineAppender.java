@@ -12,8 +12,8 @@ public class LineAppender {
   private final StationReader stationReader;
 
   public Line append(CreateLineRequest createLineRequest) {
-    Station upStation = stationReader.read(createLineRequest.getUpStationId());
-    Station downStation = stationReader.read(createLineRequest.getDownStationId());
+    Station upStation = stationReader.readById(createLineRequest.getUpStationId());
+    Station downStation = stationReader.readById(createLineRequest.getDownStationId());
     Line line =
         new Line(
             createLineRequest.getName(),
