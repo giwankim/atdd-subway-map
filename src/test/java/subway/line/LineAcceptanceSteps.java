@@ -85,12 +85,10 @@ public class LineAcceptanceSteps {
     return RestAssured.given().log().all().when().delete(uri).then().log().all().extract();
   }
 
-  public static void 지하철_노선_삭제됨(
-      ExtractableResponse<Response> response,
-      ExtractableResponse<Response> listResponse,
-      ExtractableResponse<Response> createResponse) {
+  public static void 지하철_노선_삭제됨(String uri, ExtractableResponse<Response> response) {
     assertThat(response.statusCode()).isEqualTo(HttpStatus.NO_CONTENT.value());
-    List<LineResponse> lines = listResponse.jsonPath().getList(".", LineResponse.class);
-    assertThat(lines).doesNotContain(createResponse.as(LineResponse.class)).isEmpty();
+    ExtractableResponse<Response> getResponse =
+        RestAssured.given().log().all().when().get(uri).then().log().all().extract();
+    assertThat(getResponse.statusCode()).isEqualTo(HttpStatus.NOT_FOUND.value());
   }
 }

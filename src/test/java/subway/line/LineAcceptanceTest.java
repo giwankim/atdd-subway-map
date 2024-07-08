@@ -89,6 +89,6 @@ class LineAcceptanceTest extends AcceptanceTest {
 
     ExtractableResponse<Response> response = 지하철_삭제_요청(uri);
 
-    지하철_노선_삭제됨(response, 지하철_노선_목록_조회_요청(), createResponse);
+    지하철_노선_삭제됨(uri, response);
   }
 }
