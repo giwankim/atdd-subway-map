@@ -15,13 +15,14 @@ public class LineAcceptanceSteps {
   private LineAcceptanceSteps() {}
 
   public static ExtractableResponse<Response> 지하철_노선_생성_요청(Line line) {
+    Section section = line.getSections().get(0);
     CreateLineRequest request =
         new CreateLineRequest(
             line.getName(),
             line.getColor(),
-            line.getUpStation().getId(),
-            line.getDownStation().getId(),
-            line.getDistance());
+            section.getUpStation().getId(),
+            section.getDownStation().getId(),
+            section.getDistance());
     return RestAssured.given()
         .log()
         .all()

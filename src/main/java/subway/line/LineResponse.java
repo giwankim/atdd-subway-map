@@ -1,6 +1,5 @@
 package subway.line;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
@@ -26,12 +25,7 @@ public class LineResponse {
 
   public static LineResponse from(Line line) {
     return new LineResponse(
-        line.getId(),
-        line.getName(),
-        line.getColor(),
-        Arrays.asList(
-            StationResponse.from(line.getUpStation()),
-            StationResponse.from(line.getDownStation())));
+        line.getId(), line.getName(), line.getColor(), StationResponse.listOf(line.getStations()));
   }
 
   public static List<LineResponse> listOf(List<Line> lines) {

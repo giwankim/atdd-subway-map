@@ -1,5 +1,10 @@
 package subway.line;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 import javax.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -21,29 +26,24 @@ public class Line {
   @Column(nullable = false)
   private String color;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "up_station_id")
-  private Station upStation;
-
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "down_station_id")
-  private Station downStation;
-
-  private int distance;
-
-  public Line(String name, String color, Station upStation, Station downStation, int distance) {
-    this(null, name, color, upStation, downStation, distance);
-  }
+  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+  @JoinColumn(name = "line_id")
+  private List<Section> sections = new ArrayList<>();
 
   @Builder
-  public Line(
-      Long id, String name, String color, Station upStation, Station downStation, int distance) {
+  public Line(Long id, String name, String color, List<Section> sections) {
     this.id = id;
     this.name = name;
     this.color = color;
-    this.upStation = upStation;
-    this.downStation = downStation;
-    this.distance = distance;
+    this.sections.addAll(sections);
+  }
+
+  public Line(String name, String color, Section... sections) {
+    this(null, name, color, Arrays.asList(sections));
+  }
+
+  public Line(String name, String color) {
+    this(null, name, color, new ArrayList<>());
   }
 
   public void changeName(String name) {
@@ -52,5 +52,19 @@ public class Line {
 
   public void changeColor(String color) {
     this.color = color;
+  }
+
+  public void addSection(Section section) {
+    sections.add(section);
+  }
+
+  public List<Station> getStations() {
+    if (sections.isEmpty()) {
+      return Collections.emptyList();
+    }
+    List<Station> stations =
+        sections.stream().map(Section::getUpStation).collect(Collectors.toList());
+    stations.add(sections.get(sections.size() - 1).getDownStation());
+    return stations;
   }
 }

@@ -1,5 +1,7 @@
 package subway.station;
 
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
@@ -18,5 +20,9 @@ public class StationResponse {
 
   public static StationResponse from(Station station) {
     return new StationResponse(station.getId(), station.getName());
+  }
+
+  public static List<StationResponse> listOf(List<Station> stations) {
+    return stations.stream().map(StationResponse::from).collect(Collectors.toList());
   }
 }
