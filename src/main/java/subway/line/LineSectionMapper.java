@@ -7,10 +7,10 @@ import subway.station.StationReader;
 
 @Component
 @RequiredArgsConstructor
-public class SectionMapper {
+public class LineSectionMapper {
   private final StationReader stationReader;
 
-  public LineSection map(AddSectionRequest request) {
+  public LineSection map(AddLineSectionRequest request) {
     Station upStation = stationReader.readById(request.getUpStationId());
     Station downStation = stationReader.readById(request.getDownStationId());
     return new LineSection(upStation, downStation, request.getDistance());

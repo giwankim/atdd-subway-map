@@ -23,7 +23,7 @@ public class CreateLineRequest {
     return new Line(name, color);
   }
 
-  public AddSectionRequest toAddSection() {
-    return new AddSectionRequest(upStationId, downStationId, distance);
+  public AddLineSectionRequest toAddLineSection() {
+    return new AddLineSectionRequest(upStationId, downStationId, distance);
   }
 }

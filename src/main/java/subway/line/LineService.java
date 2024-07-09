@@ -12,13 +12,13 @@ class LineService {
   private final LineReader lineReader;
   private final LineModifier lineModifier;
   private final LineRemover lineRemover;
-  private final SectionMapper sectionMapper;
+  private final LineSectionMapper lineSectionMapper;
 
   @Transactional
   public Line saveLine(CreateLineRequest request) {
     Line line = lineAppender.append(request.toLine());
-    LineSection section = sectionMapper.map(request.toAddSection());
-    line.addSection(section);
+    LineSection lineSection = lineSectionMapper.map(request.toAddLineSection());
+    line.addLineSection(lineSection);
     return line;
   }
 

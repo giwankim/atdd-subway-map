@@ -28,11 +28,11 @@ class AddLineSectionAcceptanceTest extends AcceptanceTest {
     jdbcTemplate.update("INSERT INTO station (id, name) VALUES (?, ?)", 2, "역삼역");
     jdbcTemplate.update("INSERT INTO station (id, name) VALUES (?, ?)", 3, "선릉역");
     jdbcTemplate.update(
-        "INSERT INTO line (id, name, color, up_station_id, down_station_id, distance) VALUES (?, ?,"
-            + " ?, ?, ?, ?)",
+        "INSERT INTO line (id, name, color) VALUES (?, ?, ?)", 1, "2호선", "bg-green-600");
+    jdbcTemplate.update(
+        "INSERT INTO line_section (line_id, up_station_id, down_station_id, distance) VALUES (?, ?,"
+            + " ?, ?)",
         1,
-        "2호선",
-        "bg-green-600",
         1,
         2,
         10);
@@ -42,10 +42,10 @@ class AddLineSectionAcceptanceTest extends AcceptanceTest {
   @DisplayName("지하철 구간을 등록한다.")
   @Test
   void appendSection() {
-    int upStationId = 2;
-    int downStationId = 3;
+    long upStationId = 2;
+    long downStationId = 3;
     int distance = 20;
-    AddSectionRequest request = new AddSectionRequest(upStationId, downStationId, distance);
+    AddLineSectionRequest request = new AddLineSectionRequest(upStationId, downStationId, distance);
 
     ExtractableResponse<Response> response =
         RestAssured.given()
@@ -62,7 +62,7 @@ class AddLineSectionAcceptanceTest extends AcceptanceTest {
 
     assertThat(response.statusCode()).isEqualTo(HttpStatus.CREATED.value());
     ExtractableResponse<Response> lineResponse = 지하철_노선_조회_요청("/lines/1");
-    List<Integer> stationIds = lineResponse.jsonPath().getList("stations.id", Integer.class);
+    List<Long> stationIds = lineResponse.jsonPath().getList("stations.id", Long.class);
     assertThat(stationIds.get(stationIds.size() - 1)).isEqualTo(downStationId);
   }
 

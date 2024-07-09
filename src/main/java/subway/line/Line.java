@@ -33,8 +33,8 @@ public class Line {
     this.lineSections.addAll(lineSections);
   }
 
-  public Line(String name, String color, LineSection... sections) {
-    this(null, name, color, new LineSections(Arrays.asList(sections)));
+  public Line(String name, String color, LineSection... lineSections) {
+    this(null, name, color, new LineSections(Arrays.asList(lineSections)));
   }
 
   public Line(String name, String color) {
@@ -49,8 +49,8 @@ public class Line {
     this.color = color;
   }
 
-  public void addSection(LineSection section) {
-    lineSections.add(section);
+  public void addLineSection(LineSection lineSection) {
+    lineSections.add(lineSection);
   }
 
   public List<Station> getStations() {

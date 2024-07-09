@@ -55,7 +55,7 @@ public class LineSections {
     }
     List<Station> stations =
         sections.stream().map(LineSection::getUpStation).collect(Collectors.toList());
-    stations.add(sections.get(sections.size() - 1).getDownStation());
+    stations.add(getLast().getDownStation());
     return Collections.unmodifiableList(stations);
   }
 }
