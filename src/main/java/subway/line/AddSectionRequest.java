@@ -5,8 +5,8 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Getter
-public class AppendSectionRequest {
-  private final int upStationId;
-  private final int downStationId;
+public class AddSectionRequest {
+  private final long upStationId;
+  private final long downStationId;
   private final int distance;
 }

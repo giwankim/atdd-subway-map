@@ -17,7 +17,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import subway.support.AcceptanceTest;
 
 @DisplayName("지하철 구간 등록 기능")
-class AppendSectionAcceptanceTest extends AcceptanceTest {
+class AddSectionAcceptanceTest extends AcceptanceTest {
   @Autowired private JdbcTemplate jdbcTemplate;
 
   @Override
@@ -45,7 +45,7 @@ class AppendSectionAcceptanceTest extends AcceptanceTest {
     int upStationId = 2;
     int downStationId = 3;
     int distance = 20;
-    AppendSectionRequest request = new AppendSectionRequest(upStationId, downStationId, distance);
+    AddSectionRequest request = new AddSectionRequest(upStationId, downStationId, distance);
 
     ExtractableResponse<Response> response =
         RestAssured.given()
