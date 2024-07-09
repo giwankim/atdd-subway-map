@@ -10,9 +10,9 @@ import subway.station.StationReader;
 public class SectionMapper {
   private final StationReader stationReader;
 
-  public Section map(AddSectionRequest request) {
+  public LineSection map(AddSectionRequest request) {
     Station upStation = stationReader.readById(request.getUpStationId());
     Station downStation = stationReader.readById(request.getDownStationId());
-    return new Section(upStation, downStation, request.getDistance());
+    return new LineSection(upStation, downStation, request.getDistance());
   }
 }

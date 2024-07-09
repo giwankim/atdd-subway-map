@@ -10,7 +10,7 @@ import subway.station.Station;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class Section {
+public class LineSection {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
@@ -26,14 +26,14 @@ public class Section {
   private int distance;
 
   @Builder
-  public Section(Long id, Station upStation, Station downStation, int distance) {
+  public LineSection(Long id, Station upStation, Station downStation, int distance) {
     this.id = id;
     this.upStation = upStation;
     this.downStation = downStation;
     this.distance = distance;
   }
 
-  public Section(Station upStation, Station downStation, int distance) {
+  public LineSection(Station upStation, Station downStation, int distance) {
     this(null, upStation, downStation, distance);
   }
 }

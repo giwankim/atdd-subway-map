@@ -17,7 +17,7 @@ class LineService {
   @Transactional
   public Line saveLine(CreateLineRequest request) {
     Line line = lineAppender.append(request.toLine());
-    Section section = sectionMapper.map(request.toAddSection());
+    LineSection section = sectionMapper.map(request.toAddSection());
     line.addSection(section);
     return line;
   }

@@ -15,7 +15,7 @@ public class LineAcceptanceSteps {
   private LineAcceptanceSteps() {}
 
   public static ExtractableResponse<Response> 지하철_노선_생성_요청(Line line) {
-    Section section = line.getSections().get(0);
+    LineSection section = line.getLineSections().getFirst();
     CreateLineRequest request =
         new CreateLineRequest(
             line.getName(),

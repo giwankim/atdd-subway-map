@@ -1,10 +1,7 @@
 package subway.line;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 import javax.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -26,24 +23,22 @@ public class Line {
   @Column(nullable = false)
   private String color;
 
-  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
-  @JoinColumn(name = "line_id")
-  private List<Section> sections = new ArrayList<>();
+  @Embedded private final LineSections lineSections = new LineSections();
 
   @Builder
-  public Line(Long id, String name, String color, List<Section> sections) {
+  public Line(Long id, String name, String color, LineSections lineSections) {
     this.id = id;
     this.name = name;
     this.color = color;
-    this.sections.addAll(sections);
+    this.lineSections.addAll(lineSections);
   }
 
-  public Line(String name, String color, Section... sections) {
-    this(null, name, color, Arrays.asList(sections));
+  public Line(String name, String color, LineSection... sections) {
+    this(null, name, color, new LineSections(Arrays.asList(sections)));
   }
 
   public Line(String name, String color) {
-    this(null, name, color, new ArrayList<>());
+    this(null, name, color, new LineSections());
   }
 
   public void changeName(String name) {
@@ -54,17 +49,11 @@ public class Line {
     this.color = color;
   }
 
-  public void addSection(Section section) {
-    sections.add(section);
+  public void addSection(LineSection section) {
+    lineSections.add(section);
   }
 
   public List<Station> getStations() {
-    if (sections.isEmpty()) {
-      return Collections.emptyList();
-    }
-    List<Station> stations =
-        sections.stream().map(Section::getUpStation).collect(Collectors.toList());
-    stations.add(sections.get(sections.size() - 1).getDownStation());
-    return stations;
+    return lineSections.getStations();
   }
 }

@@ -17,7 +17,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import subway.support.AcceptanceTest;
 
 @DisplayName("지하철 구간 등록 기능")
-class AddSectionAcceptanceTest extends AcceptanceTest {
+class AddLineSectionAcceptanceTest extends AcceptanceTest {
   @Autowired private JdbcTemplate jdbcTemplate;
 
   @Override

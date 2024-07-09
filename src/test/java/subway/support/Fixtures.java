@@ -1,8 +1,8 @@
 package subway.support;
 
-import java.util.List;
 import subway.line.Line;
-import subway.line.Section;
+import subway.line.LineSection;
+import subway.line.LineSections;
 import subway.station.Station;
 
 public class Fixtures {
@@ -25,7 +25,7 @@ public class Fixtures {
         .id(1L)
         .name("2호선")
         .color("bg-green-600")
-        .sections(List.of(aLineTwoSection()))
+        .lineSections(new LineSections(aLineTwoSection()))
         .build();
   }
 
@@ -34,20 +34,20 @@ public class Fixtures {
         .id(2L)
         .name("신분당선")
         .color("bg-red-600")
-        .sections(List.of(shinBundangLineSection()))
+        .lineSections(new LineSections(shinBundangLineSection()))
         .build();
   }
 
-  public static Section aLineTwoSection() {
-    return Section.builder()
+  public static LineSection aLineTwoSection() {
+    return LineSection.builder()
         .upStation(gangnamStation())
         .downStation(yeoksamStation())
         .distance(10)
         .build();
   }
 
-  public static Section shinBundangLineSection() {
-    return Section.builder()
+  public static LineSection shinBundangLineSection() {
+    return LineSection.builder()
         .upStation(gangnamStation())
         .downStation(pangyoStation())
         .distance(20)
