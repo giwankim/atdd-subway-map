@@ -8,6 +8,7 @@ import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import subway.support.AcceptanceTest;
 
 @DisplayName("지하철 구간 등록 기능")
-class AddLineSectionAcceptanceTest extends AcceptanceTest {
+class AppendLineSectionAcceptanceTest extends AcceptanceTest {
   @Autowired private JdbcTemplate jdbcTemplate;
 
   @Override
@@ -45,7 +46,8 @@ class AddLineSectionAcceptanceTest extends AcceptanceTest {
     long upStationId = 2;
     long downStationId = 3;
     int distance = 20;
-    AddLineSectionRequest request = new AddLineSectionRequest(upStationId, downStationId, distance);
+    AppendLineSectionRequest request =
+        new AppendLineSectionRequest(upStationId, downStationId, distance);
 
     ExtractableResponse<Response> response =
         RestAssured.given()
@@ -69,6 +71,7 @@ class AddLineSectionAcceptanceTest extends AcceptanceTest {
   /** Given 새로운 구간의 상행역이 노선에 등록되어있는 하행 종점역이 아니고 When 구간 등록을 하면 Then 400 에러가 반환된다. */
   @DisplayName("노선을 연장할 수 없는 구간을 등록 시 에러가 발생한다.")
   @Test
+  @Disabled
   void appendSectionNotAppendable() {
     throw new UnsupportedOperationException("테스트 작성 중");
   }
@@ -76,6 +79,7 @@ class AddLineSectionAcceptanceTest extends AcceptanceTest {
   /** Given 구간의 하행 역이 이미 해당 노선에 등록되어 있으면 When 구간 등록을 하면 Then 400 에러가 반환된다. */
   @DisplayName("Cycle이 생길 수 있는 지하철 구간 등록 시 에러가 발생한다.")
   @Test
+  @Disabled
   void appendSectionCycle() {
     throw new UnsupportedOperationException("테스트 작성 중");
   }
