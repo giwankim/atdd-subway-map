@@ -1,15 +1,14 @@
 package subway.line;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static subway.line.RemoveLineSectionSteps.구간_삭제_요청;
+import static subway.line.RemoveLineSectionSteps.구간_삭제됨;
 
-import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import subway.support.AcceptanceTest;
 
@@ -33,6 +32,13 @@ class RemoveLineSectionAcceptanceTest extends AcceptanceTest {
         1,
         2,
         10);
+    jdbcTemplate.update(
+        "INSERT INTO line_section (line_id, up_station_id, down_station_id, distance) VALUES (?, ?,"
+            + " ?, ?)",
+        1,
+        2,
+        3,
+        20);
   }
 
   /** Given 노선에 등록된 구간이 존재하고 When 종점역 구간 제거를 요청하면 Then 해당 노선 조회 시 등록한 구간의 하행 종점역에서 제외된다. */
@@ -40,21 +46,11 @@ class RemoveLineSectionAcceptanceTest extends AcceptanceTest {
   @Test
   void removeLineSection() {
     long lineId = 1;
-    long stationId = 2;
+    long stationId = 3;
     String uri = String.format("/lines/%d/sections", lineId);
 
-    ExtractableResponse<Response> response =
-        RestAssured.given()
-            .log()
-            .all()
-            .queryParam("stationId", stationId)
-            .when()
-            .delete(uri)
-            .then()
-            .log()
-            .all()
-            .extract();
+    ExtractableResponse<Response> response = 구간_삭제_요청(stationId, uri);
 
-    assertThat(response.statusCode()).isEqualTo(HttpStatus.NO_CONTENT.value());
+    구간_삭제됨(response, lineId, stationId);
   }
 }
