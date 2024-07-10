@@ -11,8 +11,9 @@ import subway.station.StationReader;
 public class LineSectionService {
   private final LineReader lineReader;
   private final LineSectionMapper lineSectionMapper;
-  private final AppendLineSectionValidator appendLineSectionValidator;
   private final StationReader stationReader;
+  private final AppendLineSectionValidator appendLineSectionValidator;
+  private final RemoveLineSectionValidator removeLineSectionValidator;
 
   @Transactional
   public Line appendLineSection(Long lineId, AppendLineSectionRequest request) {
@@ -26,6 +27,6 @@ public class LineSectionService {
   public void removeLineSection(Long lineId, Long stationId) {
     Line line = lineReader.readById(lineId);
     Station station = stationReader.readById(stationId);
-    line.removeStation(station);
+    line.removeStation(station, removeLineSectionValidator);
   }
 }

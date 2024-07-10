@@ -59,7 +59,9 @@ public class Line {
     return lineSections.getStations();
   }
 
-  public void removeStation(Station station) {
+  public void removeStation(
+      Station station, RemoveLineSectionValidator removeLineSectionValidator) {
+    removeLineSectionValidator.validate(lineSections, station);
     lineSections.removeStation(station);
   }
 }
