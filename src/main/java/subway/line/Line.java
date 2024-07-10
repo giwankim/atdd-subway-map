@@ -62,6 +62,6 @@ public class Line {
   public void removeStation(
       Station station, RemoveLineSectionValidator removeLineSectionValidator) {
     removeLineSectionValidator.validate(lineSections, station);
-    lineSections.removeStation(station);
+    lineSections.removeLast();
   }
 }

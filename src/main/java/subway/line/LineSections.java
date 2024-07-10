@@ -29,6 +29,10 @@ public class LineSections {
     this.sections.addAll(Arrays.asList(lineSections));
   }
 
+  public int size() {
+    return sections.size();
+  }
+
   public boolean isEmpty() {
     return sections.isEmpty();
   }
@@ -59,7 +63,7 @@ public class LineSections {
     return Collections.unmodifiableList(stations);
   }
 
-  public void removeStation(Station station) {
+  public void removeLast() {
     sections.remove(sections.size() - 1);
   }
 }

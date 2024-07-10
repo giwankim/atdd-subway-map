@@ -11,6 +11,9 @@ public class RemoveLineSectionValidator {
     if (!isTerminalStation(lineSections, station)) {
       throw new RemoveNonTerminalStationException();
     }
+    if (lineSections.size() <= 1) {
+      throw new RemoveLastLineSectionException();
+    }
   }
 
   private static boolean isTerminalStation(LineSections lineSections, Station station) {
