@@ -7,7 +7,7 @@ import subway.station.Station;
 
 @Component
 @RequiredArgsConstructor
-public class LineSectionValidator {
+public class AppendLineSectionValidator {
   public void validate(LineSections lineSections, LineSection lineSection) {
     if (lineSections.isEmpty()) {
       return;

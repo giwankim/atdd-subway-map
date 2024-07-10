@@ -49,12 +49,17 @@ public class Line {
     this.color = color;
   }
 
-  public void addLineSection(LineSection lineSection, LineSectionValidator lineSectionValidator) {
-    lineSectionValidator.validate(lineSections, lineSection);
+  public void addLineSection(
+      LineSection lineSection, AppendLineSectionValidator appendLineSectionValidator) {
+    appendLineSectionValidator.validate(lineSections, lineSection);
     lineSections.add(lineSection);
   }
 
   public List<Station> getStations() {
     return lineSections.getStations();
+  }
+
+  public void removeStation(Station station) {
+    lineSections.removeStation(station);
   }
 }

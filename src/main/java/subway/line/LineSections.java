@@ -58,4 +58,8 @@ public class LineSections {
     stations.add(getLast().getDownStation());
     return Collections.unmodifiableList(stations);
   }
+
+  public void removeStation(Station station) {
+    sections.remove(sections.size() - 1);
+  }
 }
