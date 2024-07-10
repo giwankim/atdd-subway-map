@@ -1,6 +1,7 @@
 package subway.line;
 
-import static subway.line.AppendLineSectionSteps.지하철_구간_등록됨;
+import static subway.line.AppendLineSectionSteps.노선_구간_등록됨;
+import static subway.line.AppendLineSectionSteps.노선_구간_요청_실패함;
 
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
@@ -23,6 +24,7 @@ class AppendLineSectionAcceptanceTest extends AcceptanceTest {
     jdbcTemplate.update("INSERT INTO station (id, name) VALUES (?, ?)", 1, "강남역");
     jdbcTemplate.update("INSERT INTO station (id, name) VALUES (?, ?)", 2, "역삼역");
     jdbcTemplate.update("INSERT INTO station (id, name) VALUES (?, ?)", 3, "선릉역");
+    jdbcTemplate.update("INSERT INTO station (id, name) VALUES (?, ?)", 4, "판교역");
     jdbcTemplate.update(
         "INSERT INTO line (id, name, color) VALUES (?, ?, ?)", 1, "2호선", "bg-green-600");
     jdbcTemplate.update(
@@ -45,17 +47,25 @@ class AppendLineSectionAcceptanceTest extends AcceptanceTest {
     AppendLineSectionRequest request =
         new AppendLineSectionRequest(upStationId, downStationId, distance);
 
-    ExtractableResponse<Response> response = AppendLineSectionSteps.지하철_구간_등록_요청(lineId, request);
+    ExtractableResponse<Response> response = AppendLineSectionSteps.노선_구간_등록_요청(lineId, request);
 
-    지하철_구간_등록됨(response, lineId, downStationId);
+    노선_구간_등록됨(response, lineId, downStationId);
   }
 
   /** Given 새로운 구간의 상행역이 노선에 등록되어있는 하행 종점역이 아니고 When 구간 등록을 하면 Then 400 Bad Request 에러가 반환된다. */
   @DisplayName("노선을 연장할 수 없는 구간을 등록 시 에러가 발생한다.")
   @Test
-  @Disabled
   void appendSectionNotAppendable() {
-    throw new UnsupportedOperationException("테스트 작성 중");
+    long lineId = 1;
+    long upStationId = 3;
+    long downStationId = 4;
+    int distance = 20;
+    AppendLineSectionRequest request =
+        new AppendLineSectionRequest(upStationId, downStationId, distance);
+
+    ExtractableResponse<Response> response = AppendLineSectionSteps.노선_구간_등록_요청(lineId, request);
+
+    노선_구간_요청_실패함(response);
   }
 
   /** Given 구간의 하행 역이 이미 해당 노선에 등록되어 있으면 When 구간 등록을 하면 Then 400 Bad Request 에러가 반환된다. */
