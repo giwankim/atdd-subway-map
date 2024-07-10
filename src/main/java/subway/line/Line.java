@@ -49,7 +49,8 @@ public class Line {
     this.color = color;
   }
 
-  public void addLineSection(LineSection lineSection) {
+  public void addLineSection(LineSection lineSection, LineSectionValidator lineSectionValidator) {
+    lineSectionValidator.validate(lineSections, lineSection);
     lineSections.add(lineSection);
   }
 

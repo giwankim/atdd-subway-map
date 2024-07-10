@@ -1,10 +1,7 @@
 package subway.station;
 
 import javax.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -25,5 +22,9 @@ public class Station {
 
   public Station(String name) {
     this(null, name);
+  }
+
+  public boolean isSame(Station other) {
+    return this.id.equals(other.id);
   }
 }
