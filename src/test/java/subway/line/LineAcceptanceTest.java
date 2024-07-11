@@ -2,7 +2,7 @@ package subway.line;
 
 import static subway.line.LineAcceptanceSteps.*;
 import static subway.support.Fixtures.lineTwo;
-import static subway.support.Fixtures.shinBundangLine;
+import static subway.support.Fixtures.shinBundang;
 
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
@@ -46,7 +46,7 @@ class LineAcceptanceTest extends AcceptanceTest {
   @Test
   void showLines() {
     ExtractableResponse<Response> lineTwo = 지하철_노선_생성_요청(lineTwo());
-    ExtractableResponse<Response> shinBundang = 지하철_노선_생성_요청(shinBundangLine());
+    ExtractableResponse<Response> shinBundang = 지하철_노선_생성_요청(shinBundang());
 
     ExtractableResponse<Response> response = 지하철_노선_목록_조회_요청();
 
@@ -72,7 +72,7 @@ class LineAcceptanceTest extends AcceptanceTest {
   void updateLine() {
     String newName = "다른분당선";
     String newColor = "bg-orange-600";
-    ExtractableResponse<Response> createResponse = 지하철_노선_생성_요청(shinBundangLine());
+    ExtractableResponse<Response> createResponse = 지하철_노선_생성_요청(shinBundang());
     String uri = createResponse.header(HttpHeaders.LOCATION);
 
     지하철_노선_수정_요청(uri, newName, newColor);

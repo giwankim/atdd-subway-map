@@ -13,15 +13,19 @@ import org.springframework.http.MediaType;
 public class AppendLineSectionSteps {
   private AppendLineSectionSteps() {}
 
-  public static ExtractableResponse<Response> 노선_구간_등록_요청(
-      long lineId, AppendLineSectionRequest request) {
+  public static ExtractableResponse<Response> 노선_구간_등록_요청(Line line, LineSection lineSection) {
+    AppendLineSectionRequest request =
+        new AppendLineSectionRequest(
+            lineSection.getUpStation().getId(),
+            lineSection.getDownStation().getId(),
+            lineSection.getDistance());
     return RestAssured.given()
         .log()
         .all()
         .contentType(MediaType.APPLICATION_JSON_VALUE)
         .body(request)
         .when()
-        .post("/lines/" + lineId + "/sections")
+        .post("/lines/" + line.getId() + "/sections")
         .then()
         .log()
         .all()
@@ -29,11 +33,12 @@ public class AppendLineSectionSteps {
   }
 
   public static void 노선_구간_등록됨(
-      ExtractableResponse<Response> response, long lineId, long downStationId) {
+      ExtractableResponse<Response> response, Line line, LineSection lineSection) {
     assertThat(response.statusCode()).isEqualTo(HttpStatus.CREATED.value());
-    ExtractableResponse<Response> lineResponse = 지하철_노선_조회_요청("/lines/" + lineId);
+    ExtractableResponse<Response> lineResponse = 지하철_노선_조회_요청("/lines/" + line.getId());
     List<Long> stationIds = lineResponse.jsonPath().getList("stations.id", Long.class);
-    assertThat(stationIds.get(stationIds.size() - 1)).isEqualTo(downStationId);
+    assertThat(stationIds.get(stationIds.size() - 1))
+        .isEqualTo(lineSection.getDownStation().getId());
   }
 
   public static void 노선_구간_요청_실패함(ExtractableResponse<Response> response) {

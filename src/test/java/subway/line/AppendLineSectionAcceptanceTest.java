@@ -1,6 +1,7 @@
 package subway.line;
 
 import static subway.line.AppendLineSectionSteps.*;
+import static subway.support.Fixtures.*;
 
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
@@ -8,60 +9,61 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
+import subway.station.Station;
+import subway.station.StationRepository;
 import subway.support.AcceptanceTest;
 
 @DisplayName("지하철 구간 등록 기능")
 class AppendLineSectionAcceptanceTest extends AcceptanceTest {
-  @Autowired private JdbcTemplate jdbcTemplate;
+  @Autowired private StationRepository stationRepository;
+  @Autowired private LineRepository lineRepository;
+
+  private Station gangnamStation;
+  private Station yeoksamStation;
+  private Station seolleungStation;
+  private Station pangyoStation;
+  private Line lineTwo;
 
   @Override
   @BeforeEach
   protected void setUp() {
     super.setUp();
-    jdbcTemplate.update("INSERT INTO station (id, name) VALUES (?, ?)", 1, "강남역");
-    jdbcTemplate.update("INSERT INTO station (id, name) VALUES (?, ?)", 2, "역삼역");
-    jdbcTemplate.update("INSERT INTO station (id, name) VALUES (?, ?)", 3, "선릉역");
-    jdbcTemplate.update("INSERT INTO station (id, name) VALUES (?, ?)", 4, "판교역");
-    jdbcTemplate.update(
-        "INSERT INTO line (id, name, color) VALUES (?, ?, ?)", 1, "2호선", "bg-green-600");
-    jdbcTemplate.update(
-        "INSERT INTO line_section (line_id, up_station_id, down_station_id, distance) VALUES (?, ?,"
-            + " ?, ?)",
-        1,
-        1,
-        2,
-        10);
+    gangnamStation = stationRepository.save(gangnam());
+    yeoksamStation = stationRepository.save(yeoksam());
+    seolleungStation = stationRepository.save(seolleung());
+    pangyoStation = stationRepository.save(pangyo());
+    lineTwo =
+        lineRepository.save(aLine().lineSections(new LineSections(gangnamToYeoksam())).build());
   }
 
   /** When 구간 등록을 하면 Then 해당 노선 조회 시 등록한 구간의 하행역이 노선의 하행 종점역이다. */
   @DisplayName("지하철 구간을 등록한다.")
   @Test
   void appendLineSection() {
-    long lineId = 1;
-    long upStationId = 2;
-    long downStationId = 3;
-    int distance = 20;
-    AppendLineSectionRequest request =
-        new AppendLineSectionRequest(upStationId, downStationId, distance);
+    LineSection yeoksamToSeolleung =
+        LineSection.builder()
+            .upStation(yeoksamStation)
+            .downStation(seolleungStation)
+            .distance(20)
+            .build();
 
-    ExtractableResponse<Response> response = 노선_구간_등록_요청(lineId, request);
+    ExtractableResponse<Response> response = 노선_구간_등록_요청(lineTwo, yeoksamToSeolleung);
 
-    노선_구간_등록됨(response, lineId, downStationId);
+    노선_구간_등록됨(response, lineTwo, yeoksamToSeolleung);
   }
 
   /** Given 새로운 구간의 상행역이 노선에 등록되어있는 하행 종점역이 아니고 When 구간 등록을 하면 Then 400 Bad Request 에러가 반환된다. */
   @DisplayName("노선을 연장할 수 없는 구간을 등록 시 에러가 발생한다.")
   @Test
   void appendLineSectionNotAppendable() {
-    long lineId = 1;
-    long upStationId = 3;
-    long downStationId = 4;
-    int distance = 20;
-    AppendLineSectionRequest request =
-        new AppendLineSectionRequest(upStationId, downStationId, distance);
+    LineSection disjointedSection =
+        LineSection.builder()
+            .upStation(seolleungStation)
+            .downStation(pangyoStation)
+            .distance(20)
+            .build();
 
-    ExtractableResponse<Response> response = 노선_구간_등록_요청(lineId, request);
+    ExtractableResponse<Response> response = 노선_구간_등록_요청(lineTwo, disjointedSection);
 
     노선_구간_요청_실패함(response);
   }
@@ -70,14 +72,14 @@ class AppendLineSectionAcceptanceTest extends AcceptanceTest {
   @DisplayName("구간의 하행 역이 이미 해당 노선에 등록되어 있으면 구간 등록 시 에러가 발생한다.")
   @Test
   void appendLineSectionCycle() {
-    long lineId = 1;
-    long upStationId = 2;
-    long downStationId = 1;
-    int distance = 20;
-    AppendLineSectionRequest request =
-        new AppendLineSectionRequest(upStationId, downStationId, distance);
+    LineSection cyclicSection =
+        LineSection.builder()
+            .upStation(yeoksamStation)
+            .downStation(gangnamStation)
+            .distance(20)
+            .build();
 
-    ExtractableResponse<Response> response = 노선_구간_등록_요청(lineId, request);
+    ExtractableResponse<Response> response = 노선_구간_등록_요청(lineTwo, cyclicSection);
 
     노선_구간_요청_실패함(response);
   }
