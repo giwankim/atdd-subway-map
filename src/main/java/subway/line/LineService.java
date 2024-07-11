@@ -13,7 +13,6 @@ public class LineService {
   private final LineModifier lineModifier;
   private final LineRemover lineRemover;
   private final LineSectionMapper lineSectionMapper;
-  private final AppendLineSectionValidator appendLineSectionValidator;
 
   @Transactional
   public Line saveLine(CreateLineRequest request) {

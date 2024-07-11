@@ -64,7 +64,8 @@ public class LineSections {
     return Collections.unmodifiableList(stations);
   }
 
-  public void removeLast() {
+  public void removeLast(Station station) {
+    validateRemove(station);
     sections.remove(sections.size() - 1);
   }
 
@@ -88,5 +89,18 @@ public class LineSections {
     List<Station> stations = getStations();
     Station downStation = lineSection.getDownStation();
     return stations.stream().anyMatch(station -> station.isSame(downStation));
+  }
+
+  private void validateRemove(Station station) {
+    if (!isTerminalStation(station)) {
+      throw new RemoveNonTerminalStationException();
+    }
+    if (size() <= 1) {
+      throw new RemoveLastLineSectionException();
+    }
+  }
+
+  private boolean isTerminalStation(Station station) {
+    return getLast().getDownStation().isSame(station);
   }
 }

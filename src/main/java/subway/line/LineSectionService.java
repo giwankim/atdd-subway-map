@@ -12,7 +12,6 @@ public class LineSectionService {
   private final LineReader lineReader;
   private final LineSectionMapper lineSectionMapper;
   private final StationReader stationReader;
-  private final RemoveLineSectionValidator removeLineSectionValidator;
 
   @Transactional
   public Line appendLineSection(Long lineId, AppendLineSectionRequest request) {
@@ -26,6 +25,6 @@ public class LineSectionService {
   public void removeLineSection(Long lineId, Long stationId) {
     Line line = lineReader.readById(lineId);
     Station station = stationReader.readById(stationId);
-    line.removeStation(station, removeLineSectionValidator);
+    line.removeStation(station);
   }
 }
