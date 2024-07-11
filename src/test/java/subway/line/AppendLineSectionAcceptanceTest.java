@@ -18,20 +18,20 @@ class AppendLineSectionAcceptanceTest extends AcceptanceTest {
   @Autowired private StationRepository stationRepository;
   @Autowired private LineRepository lineRepository;
 
-  private Station gangnamStation;
-  private Station yeoksamStation;
-  private Station seolleungStation;
-  private Station pangyoStation;
+  private Station gangnam;
+  private Station yeoksam;
+  private Station seolleung;
+  private Station pangyo;
   private Line lineTwo;
 
   @Override
   @BeforeEach
   protected void setUp() {
     super.setUp();
-    gangnamStation = stationRepository.save(gangnam());
-    yeoksamStation = stationRepository.save(yeoksam());
-    seolleungStation = stationRepository.save(seolleung());
-    pangyoStation = stationRepository.save(pangyo());
+    gangnam = stationRepository.save(gangnam());
+    yeoksam = stationRepository.save(yeoksam());
+    seolleung = stationRepository.save(seolleung());
+    pangyo = stationRepository.save(pangyo());
     lineTwo =
         lineRepository.save(aLine().lineSections(new LineSections(gangnamToYeoksam())).build());
   }
@@ -41,11 +41,7 @@ class AppendLineSectionAcceptanceTest extends AcceptanceTest {
   @Test
   void appendLineSection() {
     LineSection yeoksamToSeolleung =
-        LineSection.builder()
-            .upStation(yeoksamStation)
-            .downStation(seolleungStation)
-            .distance(20)
-            .build();
+        LineSection.builder().upStation(yeoksam).downStation(seolleung).distance(20).build();
 
     ExtractableResponse<Response> response = 노선_구간_등록_요청(lineTwo, yeoksamToSeolleung);
 
@@ -57,11 +53,7 @@ class AppendLineSectionAcceptanceTest extends AcceptanceTest {
   @Test
   void appendLineSectionNotAppendable() {
     LineSection disjointedSection =
-        LineSection.builder()
-            .upStation(seolleungStation)
-            .downStation(pangyoStation)
-            .distance(20)
-            .build();
+        LineSection.builder().upStation(seolleung).downStation(pangyo).distance(20).build();
 
     ExtractableResponse<Response> response = 노선_구간_등록_요청(lineTwo, disjointedSection);
 
@@ -73,11 +65,7 @@ class AppendLineSectionAcceptanceTest extends AcceptanceTest {
   @Test
   void appendLineSectionCycle() {
     LineSection cyclicSection =
-        LineSection.builder()
-            .upStation(yeoksamStation)
-            .downStation(gangnamStation)
-            .distance(20)
-            .build();
+        LineSection.builder().upStation(yeoksam).downStation(gangnam).distance(20).build();
 
     ExtractableResponse<Response> response = 노선_구간_등록_요청(lineTwo, cyclicSection);
 
