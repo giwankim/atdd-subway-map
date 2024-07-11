@@ -13,7 +13,7 @@ public class AppendLineSectionValidator {
       return;
     }
     if (!isAppendable(lineSections, lineSection)) {
-      throw new LineSectionNotAppendable();
+      throw new LineSectionNotAppendableException();
     }
     if (isCycle(lineSections, lineSection)) {
       throw new CycleNotAllowedException();

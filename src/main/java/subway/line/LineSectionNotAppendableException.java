@@ -3,8 +3,8 @@ package subway.line;
 import subway.support.error.ApiException;
 import subway.support.error.ErrorType;
 
-public class LineSectionNotAppendable extends ApiException {
-  public LineSectionNotAppendable() {
+public class LineSectionNotAppendableException extends ApiException {
+  public LineSectionNotAppendableException() {
     super(ErrorType.BAD_REQUEST);
   }
 }

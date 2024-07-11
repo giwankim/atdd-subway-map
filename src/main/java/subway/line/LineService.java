@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-class LineService {
+public class LineService {
   private final LineAppender lineAppender;
   private final LineReader lineReader;
   private final LineModifier lineModifier;
@@ -19,7 +19,7 @@ class LineService {
   public Line saveLine(CreateLineRequest request) {
     Line line = lineAppender.append(request.toLine());
     LineSection lineSection = lineSectionMapper.map(request.toAddLineSection());
-    line.addLineSection(lineSection, appendLineSectionValidator);
+    line.appendLineSection(lineSection);
     return line;
   }
 

@@ -66,7 +66,7 @@ class RemoveLineSectionAcceptanceTest extends AcceptanceTest {
     노선_구간_삭제_실패함(response);
   }
 
-  /** Given 하나의 구간만 등록되어 있고 When 구간을 삭제 요청하면 Then 400 Bad Request 에러가 반환된다. */
+  /** Given 노선의 구간이 1개인 경우 When 구간을 삭제 요청하면 Then 400 Bad Request 에러가 반환된다. */
   @DisplayName("구간이 하나만 존재할 때 구간 제거 시 에러가 발생한다.")
   @Test
   void removeLastLineSectionShouldReturnError() {

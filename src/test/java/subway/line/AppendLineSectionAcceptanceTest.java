@@ -67,7 +67,7 @@ class AppendLineSectionAcceptanceTest extends AcceptanceTest {
   }
 
   /** Given 구간의 하행 역이 이미 해당 노선에 등록되어 있으면 When 구간 등록을 하면 Then 400 Bad Request 에러가 반환된다. */
-  @DisplayName("Cycle이 생길 수 있는 지하철 구간 등록 시 에러가 발생한다.")
+  @DisplayName("구간의 하행 역이 이미 해당 노선에 등록되어 있으면 구간 등록 시 에러가 발생한다.")
   @Test
   void appendLineSectionCycle() {
     long lineId = 1;

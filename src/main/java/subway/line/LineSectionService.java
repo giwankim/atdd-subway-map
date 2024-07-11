@@ -12,14 +12,13 @@ public class LineSectionService {
   private final LineReader lineReader;
   private final LineSectionMapper lineSectionMapper;
   private final StationReader stationReader;
-  private final AppendLineSectionValidator appendLineSectionValidator;
   private final RemoveLineSectionValidator removeLineSectionValidator;
 
   @Transactional
   public Line appendLineSection(Long lineId, AppendLineSectionRequest request) {
     Line line = lineReader.readById(lineId);
     LineSection lineSection = lineSectionMapper.map(request);
-    line.addLineSection(lineSection, appendLineSectionValidator);
+    line.appendLineSection(lineSection);
     return line;
   }
 
