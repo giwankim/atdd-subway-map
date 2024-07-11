@@ -18,4 +18,12 @@ public class CreateLineRequest {
     this.downStationId = downStationId;
     this.distance = distance;
   }
+
+  public Line toLine() {
+    return new Line(name, color);
+  }
+
+  public AppendLineSectionRequest toAddLineSection() {
+    return new AppendLineSectionRequest(upStationId, downStationId, distance);
+  }
 }

@@ -15,13 +15,14 @@ public class LineAcceptanceSteps {
   private LineAcceptanceSteps() {}
 
   public static ExtractableResponse<Response> 지하철_노선_생성_요청(Line line) {
+    LineSection section = line.getLineSections().getFirst();
     CreateLineRequest request =
         new CreateLineRequest(
             line.getName(),
             line.getColor(),
-            line.getUpStation().getId(),
-            line.getDownStation().getId(),
-            line.getDistance());
+            section.getUpStation().getId(),
+            section.getDownStation().getId(),
+            section.getDistance());
     return RestAssured.given()
         .log()
         .all()
@@ -82,17 +83,13 @@ public class LineAcceptanceSteps {
   }
 
   public static ExtractableResponse<Response> 지하철_삭제_요청(String uri) {
-    ExtractableResponse<Response> response =
-        RestAssured.given().log().all().when().delete(uri).then().log().all().extract();
-    return response;
+    return RestAssured.given().log().all().when().delete(uri).then().log().all().extract();
   }
 
-  public static void 지하철_노선_삭제됨(
-      ExtractableResponse<Response> response,
-      ExtractableResponse<Response> listResponse,
-      ExtractableResponse<Response> createResponse) {
+  public static void 지하철_노선_삭제됨(String uri, ExtractableResponse<Response> response) {
     assertThat(response.statusCode()).isEqualTo(HttpStatus.NO_CONTENT.value());
-    List<LineResponse> lines = listResponse.jsonPath().getList(".", LineResponse.class);
-    assertThat(lines).doesNotContain(createResponse.as(LineResponse.class)).isEmpty();
+    ExtractableResponse<Response> getResponse =
+        RestAssured.given().log().all().when().get(uri).then().log().all().extract();
+    assertThat(getResponse.statusCode()).isEqualTo(HttpStatus.NOT_FOUND.value());
   }
 }

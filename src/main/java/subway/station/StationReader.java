@@ -8,9 +8,9 @@ import org.springframework.stereotype.Component;
 public class StationReader {
   private final StationRepository stationRepository;
 
-  public Station read(Long id) {
+  public Station readById(Long id) {
     return stationRepository
         .findById(id)
-        .orElseThrow(() -> new IllegalArgumentException("해당 역이 존재하지 않습니다."));
+        .orElseThrow(() -> new StationNotFoundException("역 #" + id + "이 존재하지 않습니다."));
   }
 }
