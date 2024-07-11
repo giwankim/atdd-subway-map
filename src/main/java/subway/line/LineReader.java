@@ -14,6 +14,8 @@ public class LineReader {
   }
 
   public Line readById(Long id) {
-    return lineRepository.findById(id).orElseThrow(LineNotFoundException::new);
+    return lineRepository
+        .findById(id)
+        .orElseThrow(() -> new LineNotFoundException("노선 #" + id + "이 존재하지 않습니다."));
   }
 }

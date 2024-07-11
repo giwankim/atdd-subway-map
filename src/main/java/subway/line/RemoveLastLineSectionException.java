@@ -1,10 +1,10 @@
 package subway.line;
 
 import subway.support.error.ApiException;
-import subway.support.error.ErrorType;
+import subway.support.error.ErrorCode;
 
 public class RemoveLastLineSectionException extends ApiException {
   public RemoveLastLineSectionException() {
-    super(ErrorType.BAD_REQUEST);
+    super(ErrorCode.REMOVE_LAST_LINE_SECTION);
   }
 }
