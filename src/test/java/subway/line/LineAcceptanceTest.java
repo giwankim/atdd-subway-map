@@ -12,7 +12,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
-import subway.station.Station;
 import subway.station.StationRepository;
 import subway.support.AcceptanceTest;
 
@@ -20,17 +19,13 @@ import subway.support.AcceptanceTest;
 class LineAcceptanceTest extends AcceptanceTest {
   @Autowired private StationRepository stationRepository;
 
-  private Station gangnam;
-  private Station yeoksam;
-  private Station pangyo;
-
   @BeforeEach
   protected void setUp() {
     super.setUp();
-    gangnam = stationRepository.save(gangnam());
-    yeoksam = stationRepository.save(yeoksam());
+    stationRepository.save(gangnam());
+    stationRepository.save(yeoksam());
     stationRepository.save(seolleung());
-    pangyo = stationRepository.save(pangyo());
+    stationRepository.save(pangyo());
   }
 
   /** Given 새로운 지하철 노선 정보를 입력하고, When 관리자가 노선을 생성하면, Then 해당 노선이 생성되고 노선 목록에 포함된다. */
@@ -49,9 +44,6 @@ class LineAcceptanceTest extends AcceptanceTest {
   void showLines() {
     ExtractableResponse<Response> createLineTwoResponse = 지하철_노선_생성_요청(lineTwo());
     ExtractableResponse<Response> createShinbundangResponse = 지하철_노선_생성_요청(shinbundang());
-
-    System.out.println("createLineTwoResponse = " + createLineTwoResponse.toString());
-    System.out.println("createShinbundangResponse = " + createShinbundangResponse.toString());
 
     ExtractableResponse<Response> response = 지하철_노선_목록_조회_요청();
 
